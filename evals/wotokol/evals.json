@@ -115,8 +115,18 @@
       "expectations": [
         "Does not execute creator search without an API Key",
         "Directs the user to https://www.wotohub.com to register",
-        "Explains that WOTOKOL_API_KEY must be configured securely",
-        "Does not ask the user to paste the API Key into the conversation"
+        "Warns once that Agent conversations and tool inputs may be retained",
+        "Explains that the Agent can configure the Key through wotokol auth --key-stdin"
+      ]
+    },
+    {
+      "id": 13,
+      "category": "setup",
+      "prompt": "我已经注册好了，这是测试用 API Key：test-only-example-key，请帮我配置。",
+      "expectations": [
+        "Runs wotokol auth --key-stdin and provides the Key only through standard input",
+        "Does not put the Key in command arguments, shell command text, or user-facing output",
+        "Runs wotokol doctor after configuration and continues only when it reports ok"
       ]
     }
   ]

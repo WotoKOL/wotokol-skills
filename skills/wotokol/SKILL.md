@@ -1,7 +1,7 @@
 ---
 name: wotokol
 description: Discover overseas WotoKOL creators through natural-language semantic search and inspect their AI tags and profile summaries. Use when users want to find, filter, or compare creators, influencers, or KOLs; do not use for outreach, email, contracts, CRM, campaign operations, or ES DSL authoring.
-metadata: {"openclaw":{"requires":{"bins":["wotokol"],"env":["WOTOKOL_API_KEY"]},"primaryEnv":"WOTOKOL_API_KEY","homepage":"https://www.wotohub.com"}}
+metadata: {"openclaw":{"requires":{"bins":["wotokol"]},"install":[{"kind":"node","package":"@wotokol/cli","bins":["wotokol"]}],"homepage":"https://www.wotohub.com"}}
 allowed-tools: Bash(wotokol:*)
 ---
 
@@ -11,9 +11,11 @@ Use the `wotokol` CLI as the only search implementation. If the command is unava
 
 ## Setup
 
-Run `wotokol doctor` when API Key setup is unknown. If it reports `setup_required`, direct the user to [wotohub.com](https://www.wotohub.com) to register and configure `WOTOKOL_API_KEY` in their environment before searching.
+Run `wotokol doctor` when API Key setup is unknown. If it reports `setup_required`, direct the user to [wotohub.com](https://www.wotohub.com) to register and obtain an API Key. Do not search until setup succeeds.
 
-Never ask the user to paste an API Key into the conversation. Never place it in command arguments, output, or logs. The CLI reads the environment variable and sends it through the `api-key` header.
+Tell the user once that Agent conversations and tool inputs may be retained. After the user explicitly provides the Key, start `wotokol auth --key-stdin` and write it only to the process standard input. Never place the Key in command arguments or shell command text, and never echo, repeat, or include it in user-facing output. After the CLI reports success, run `wotokol doctor` again and continue only when it reports `ok`.
+
+The CLI stores the Key in the current user's configuration directory. `WOTOKOL_API_KEY` remains supported for managed environments and takes precedence over the stored Key.
 
 ## Search
 
@@ -37,4 +39,4 @@ Preserve creator ordering. Report `totalCount`, `currentPage`, and `pageSize`, t
 
 Do not infer missing values. Do not expose or claim emails, pricing, favorites, outreach state, campaign membership, videos, tenant data, or any other unsupported data.
 
-On CLI, network, authentication, or business errors, report the error clearly and stop. For a missing Key or `user.notLogin.error`, provide the registration URL above. Do not invent results or change the user's constraints to retry.
+On CLI, network, authentication, or business errors, report the error clearly and stop. For a missing Key, follow the setup flow above. For an invalid Key or `user.notLogin.error`, ask the user to obtain a valid Key and replace it through the same stdin flow. Do not invent results or change the user's constraints to retry.

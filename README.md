@@ -23,13 +23,14 @@ Install the CLI:
 npm install --global @wotokol/cli
 ```
 
-Register at [wotohub.com](https://www.wotohub.com), configure the returned API Key as `WOTOKOL_API_KEY`, then verify the environment:
+Register at [wotohub.com](https://www.wotohub.com) to obtain an API Key. The Skill can configure it through the CLI standard-input flow, then verify the environment:
 
 ```bash
+wotokol auth --key-stdin
 wotokol doctor
 ```
 
-Do not pass the API Key as a command-line argument or paste it into an agent conversation.
+The Key must be written only to the command's standard input, never passed as a command-line argument. Agent conversations and tool inputs may be retained by the Agent platform; use a revocable Key and rotate it after unexpected exposure.
 
 ## Install the Skill
 
