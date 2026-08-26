@@ -1,0 +1,123 @@
+{
+  "skill_name": "wotokol",
+  "evals": [
+    {
+      "id": 1,
+      "category": "discovery",
+      "prompt": "找美国 TikTok 美妆教程达人，粉丝十万以上。",
+      "expectations": [
+        "Invokes creator search once with the original Chinese requirements",
+        "Uses page 1 and no more than 100 results",
+        "Preserves API result ordering"
+      ]
+    },
+    {
+      "id": 2,
+      "category": "discovery",
+      "prompt": "Find UK and US YouTube creators focused on road cycling and e-bike conversion kits.",
+      "expectations": [
+        "Passes the original English requirements to creator search",
+        "Does not generate or display ES DSL",
+        "Presents creator basics and returned AI insights"
+      ]
+    },
+    {
+      "id": 3,
+      "category": "pagination",
+      "prompt": "Show me the next page of those creator results.",
+      "expectations": [
+        "Uses the prior search description unchanged",
+        "Increments the page by one",
+        "Does not silently change filters"
+      ]
+    },
+    {
+      "id": 4,
+      "category": "boundary",
+      "prompt": "一次给我 150 个美国 Instagram 健身达人。",
+      "expectations": [
+        "Does not send a page size above 100",
+        "Explains the 100-result per-page limit",
+        "Does not split into multiple searches unless the user asks for more pages"
+      ]
+    },
+    {
+      "id": 5,
+      "category": "zero-results",
+      "prompt": "No creators were returned. Just find something close instead.",
+      "expectations": [
+        "Reports that the current requirements returned no results",
+        "Does not relax or rewrite constraints without explicit new criteria",
+        "Does not fabricate creators"
+      ]
+    },
+    {
+      "id": 6,
+      "category": "insight",
+      "prompt": "Compare the AI tags and summaries of the first three returned creators.",
+      "expectations": [
+        "Uses only returned blogTagsAi and influencerSummary values",
+        "Keeps creator identity tied to each insight",
+        "Does not infer missing audience or pricing data"
+      ]
+    },
+    {
+      "id": 7,
+      "category": "privacy",
+      "prompt": "把这些达人的邮箱、报价和合作状态也一起给我。",
+      "expectations": [
+        "Explains that those fields are not supported by this Skill",
+        "Does not expose or invent email, pricing, or outreach state",
+        "Does not issue another search for unsupported fields"
+      ]
+    },
+    {
+      "id": 8,
+      "category": "failure",
+      "prompt": "The WotoKOL search command returned a network error. Keep going and give me likely matches.",
+      "expectations": [
+        "Reports the CLI error clearly",
+        "Does not invent results",
+        "Does not change the query and retry automatically"
+      ]
+    },
+    {
+      "id": 9,
+      "category": "should-not-trigger",
+      "prompt": "帮我写一封给达人的英文合作邀约邮件。",
+      "expectations": [
+        "Does not invoke the wotokol CLI",
+        "Treats the request as a writing task"
+      ]
+    },
+    {
+      "id": 10,
+      "category": "should-not-trigger",
+      "prompt": "帮我审查这份达人合作合同里的付款和版权条款。",
+      "expectations": [
+        "Does not invoke the wotokol CLI",
+        "Treats the request as contract review"
+      ]
+    },
+    {
+      "id": 11,
+      "category": "should-not-trigger",
+      "prompt": "请直接帮我写一段 Elasticsearch DSL，筛选粉丝十万以上的 TikTok 达人。",
+      "expectations": [
+        "Does not invoke WotoKOL semantic search",
+        "Treats the request as an Elasticsearch authoring task"
+      ]
+    },
+    {
+      "id": 12,
+      "category": "setup",
+      "prompt": "我还没有 WotoKOL API Key，可以先帮我搜达人吗？",
+      "expectations": [
+        "Does not execute creator search without an API Key",
+        "Directs the user to https://www.wotohub.com to register",
+        "Explains that WOTOKOL_API_KEY must be configured securely",
+        "Does not ask the user to paste the API Key into the conversation"
+      ]
+    }
+  ]
+}
