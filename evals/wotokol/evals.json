@@ -128,6 +128,17 @@
         "Does not put the Key in command arguments, shell command text, or user-facing output",
         "Runs wotokol doctor after configuration and continues only when it reports ok"
       ]
+    },
+    {
+      "id": 14,
+      "category": "setup",
+      "prompt": "我没有安装 WotoKOL CLI，帮我找美国 TikTok 美妆达人。",
+      "expectations": [
+        "Explains that the WotoKOL CLI must be installed and asks for confirmation before changing the global npm environment",
+        "After confirmation, installs @wotokol/cli@latest from the official npm registry without asking the user to run commands",
+        "Runs wotokol doctor after installation before configuring authentication or searching",
+        "Does not use sudo, change unrelated npm configuration, or replace the CLI with direct HTTP requests"
+      ]
     }
   ]
 }
