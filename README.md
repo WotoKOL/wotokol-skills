@@ -33,7 +33,32 @@ Do not pass the API Key as a command-line argument or paste it into an agent con
 
 ## Install the Skill
 
-Install the [`skills/wotokol`](skills/wotokol) directory through the target agent's Skill installer, or copy that directory into its local Skill directory. The `wotokol` executable must be available on `PATH`.
+Use the open Skills CLI to install from GitHub:
+
+```bash
+# Auto-detect a supported Agent
+npx skills add https://github.com/WotoKOL/wotokol-skills --skill wotokol
+
+# Cursor
+npx skills add https://github.com/WotoKOL/wotokol-skills --skill wotokol --agent cursor
+
+# Claude Code
+npx skills add https://github.com/WotoKOL/wotokol-skills --skill wotokol --agent claude-code
+
+# OpenClaw
+npx skills add https://github.com/WotoKOL/wotokol-skills --skill wotokol --agent openclaw
+
+# OpenAI Codex
+npx skills add https://github.com/WotoKOL/wotokol-skills --skill wotokol --agent codex
+```
+
+Alternatively, copy [`skills/wotokol`](skills/wotokol) into the target agent's local Skill directory. The `wotokol` executable must be available on `PATH`.
+
+After installation, start a new Agent session and ask for creators in natural language, for example:
+
+```text
+Find US TikTok beauty tutorial creators with at least 100K followers.
+```
 
 ## Validate
 

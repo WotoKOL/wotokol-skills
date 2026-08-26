@@ -1,6 +1,8 @@
 ---
 name: wotokol
 description: Discover overseas WotoKOL creators through natural-language semantic search and inspect their AI tags and profile summaries. Use when users want to find, filter, or compare creators, influencers, or KOLs; do not use for outreach, email, contracts, CRM, campaign operations, or ES DSL authoring.
+metadata: {"openclaw":{"requires":{"bins":["wotokol"],"env":["WOTOKOL_API_KEY"]},"primaryEnv":"WOTOKOL_API_KEY","homepage":"https://www.wotohub.com"}}
+allowed-tools: Bash(wotokol:*)
 ---
 
 # WotoKOL Overseas Creator Discovery and Insight
