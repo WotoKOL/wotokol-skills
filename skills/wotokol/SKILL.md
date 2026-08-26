@@ -33,11 +33,19 @@ The backend owns intent parsing, semantic retrieval, and relevance ranking. Neve
 
 ## Present Results
 
-Preserve creator ordering. Report `totalCount`, `currentPage`, and `pageSize`, then present only fields returned by the CLI:
+Preserve creator ordering. Report `totalCount`, `currentPage`, and `pageSize`. By default, present each creator with only these returned fields:
 
-- creator name, platform, handle, country, niche, avatar, and profile URL
-- follower count, average views, and engagement rate
-- `blogTagsAi` and `influencerSummary`
+- `creatorName`
+- `platform`
+- `profileUrl`
+- `followerCount`
+- `avgViews`
+- `engagementRate`
+- `influencerSummary`
+
+Do not display `blogTagsAi` in the default result list. Include it only when the user explicitly asks for AI tags, content tags, detailed creator profiling, or a tag-based comparison.
+
+Use `creatorHandle` only when `profileUrl` is missing. Include `country` or `niche` only when it helps show how a creator matches the user's stated requirements. Keep `sourceCreatorId` for internal follow-up only. Do not display `avatarUrl` in plain-text results.
 
 Do not infer missing values. Do not expose or claim emails, pricing, favorites, outreach state, campaign membership, videos, tenant data, or any other unsupported data.
 

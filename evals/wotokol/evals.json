@@ -8,7 +8,9 @@
       "expectations": [
         "Invokes creator search once with the original Chinese requirements",
         "Uses page 1 and no more than 100 results",
-        "Preserves API result ordering"
+        "Preserves API result ordering",
+        "Shows creatorName, platform, profileUrl, followerCount, avgViews, engagementRate, and influencerSummary when returned",
+        "Does not display blogTagsAi in the default result list"
       ]
     },
     {
@@ -18,7 +20,7 @@
       "expectations": [
         "Passes the original English requirements to creator search",
         "Does not generate or display ES DSL",
-        "Presents creator basics and returned AI insights"
+        "Presents the default core fields and influencerSummary without blogTagsAi"
       ]
     },
     {
@@ -57,6 +59,7 @@
       "prompt": "Compare the AI tags and summaries of the first three returned creators.",
       "expectations": [
         "Uses only returned blogTagsAi and influencerSummary values",
+        "Displays blogTagsAi because the user explicitly requested AI tags",
         "Keeps creator identity tied to each insight",
         "Does not infer missing audience or pricing data"
       ]

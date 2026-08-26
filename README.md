@@ -63,6 +63,8 @@ After installation, start a new Agent session and ask for creators in natural la
 Find US TikTok beauty tutorial creators with at least 100K followers.
 ```
 
+Default results show the creator name, platform, profile URL, follower count, average views, engagement rate, and AI summary. The larger `blogTagsAi` profile is shown only when the user explicitly asks for AI tags or detailed creator profiling.
+
 ## Validate
 
 Before publishing, run the target agent's Skill validator against `skills/wotokol` and validate [`evals.json`](evals/wotokol/evals.json) as JSON.
