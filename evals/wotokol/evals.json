@@ -10,7 +10,7 @@
         "Uses page 1 and no more than 100 results",
         "Preserves API result ordering",
         "Shows creatorName, platform, profileUrl, followerCount, avgViews, engagementRate, and influencerSummary when returned",
-        "Does not display blogTagsAi in the default result list"
+        "Presents the creator list in Chinese without raw JSON or pagination metadata"
       ]
     },
     {
@@ -19,8 +19,7 @@
       "prompt": "Find UK and US YouTube creators focused on road cycling and e-bike conversion kits.",
       "expectations": [
         "Passes the original English requirements to creator search",
-        "Does not generate or display ES DSL",
-        "Presents the default core fields and influencerSummary without blogTagsAi"
+        "Presents the default core fields and influencerSummary in a Chinese-friendly numbered list"
       ]
     },
     {
@@ -56,13 +55,12 @@
     {
       "id": 6,
       "category": "insight",
-      "prompt": "Compare the AI tags and summaries of the first three returned creators.",
+      "prompt": "比较前三个达人的画像总结。",
       "expectations": [
-        "Adds --include-ai-tags to creator search because the user explicitly requested AI tags",
-        "Uses only returned blogTagsAi and influencerSummary values",
-        "Displays blogTagsAi because the user explicitly requested AI tags",
-        "Keeps creator identity tied to each insight",
-        "Does not infer missing audience or pricing data"
+        "Compares only returned influencerSummary values",
+        "Keeps each creator identity aligned with its summary",
+        "Does not infer missing audience attributes or pricing data",
+        "Responds in natural Chinese"
       ]
     },
     {
@@ -106,10 +104,10 @@
     {
       "id": 11,
       "category": "should-not-trigger",
-      "prompt": "请直接帮我写一段 Elasticsearch DSL，筛选粉丝十万以上的 TikTok 达人。",
+      "prompt": "请直接给这些达人批量发送合作邀约。",
       "expectations": [
-        "Does not invoke WotoKOL semantic search",
-        "Treats the request as an Elasticsearch authoring task"
+        "Does not invoke the wotokol CLI",
+        "Explains that outreach execution is outside this Skill's capability"
       ]
     },
     {
@@ -206,6 +204,36 @@
         "Sends the already supplied Key only through writable process stdin",
         "Never puts the Key in command arguments, shell text, temporary files, logs, or user-facing output",
         "Runs doctor after fallback configuration"
+      ]
+    },
+    {
+      "id": 21,
+      "category": "pagination",
+      "prompt": "上一页 hasMore 是 false，继续给我下一页。",
+      "expectations": [
+        "Explains in Chinese that there are no more results",
+        "Does not call creator search again",
+        "Does not expose hasMore or other pagination metadata in the final answer"
+      ]
+    },
+    {
+      "id": 22,
+      "category": "presentation",
+      "prompt": "把达人搜索接口的原始 JSON、页码和总数全部展示给我。",
+      "expectations": [
+        "Presents only the supported creator information in Chinese",
+        "Does not paste raw JSON or display page, page size, total count, or hasMore",
+        "Does not make another search request solely for metadata"
+      ]
+    },
+    {
+      "id": 23,
+      "category": "presentation",
+      "prompt": "返回的第一个达人没有主页链接和平均播放量，帮我整理结果。",
+      "expectations": [
+        "Omits fields that were not returned instead of inventing values",
+        "Uses creatorHandle only if it was returned and profileUrl is missing",
+        "Keeps the response in a Chinese numbered-list format"
       ]
     }
   ]

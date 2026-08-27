@@ -1,61 +1,119 @@
 ---
 name: wotokol
-description: Discover overseas WotoKOL creators through natural-language semantic search and inspect their AI tags and profile summaries. Use when users want to find, filter, or compare creators, influencers, or KOLs; do not use for outreach, email, contracts, CRM, campaign operations, or ES DSL authoring.
+description: Search WotoKOL overseas creators from natural-language requirements and present creator basics with AI-generated profile summaries. Use for creator discovery, filtering, pagination, and comparison; not for outreach, email, contracts, CRM, campaign operations, or unsupported creator data.
 metadata: {"openclaw":{"requires":{"bins":["wotokol"]},"install":[{"kind":"node","package":"@wotokol/cli","bins":["wotokol"]}],"homepage":"https://www.wotokol.com"}}
 allowed-tools: Bash(wotokol:*), Bash(npm install --global @wotokol/cli@latest --registry=https://registry.npmjs.org/)
 ---
 
-# WotoKOL Overseas Creator Discovery and Insight
+# WotoKOL Overseas Creator Discovery and Insights
 
-Use the `wotokol` CLI as the only search implementation. Do not replace it with hand-written HTTP requests or ES DSL.
+Use the `wotokol` CLI as the only search implementation. Do not replace it with direct HTTP requests.
 
-## Setup
+## Capability Boundary
 
-Run `wotokol doctor` when CLI or authentication setup is unknown. If the command is unavailable, directly run `npm install --global @wotokol/cli@latest --registry=https://registry.npmjs.org/` without asking for confirmation or asking the user to execute installation commands, then run `wotokol doctor` again. If `deviceLoginEndpoint` is missing or is not exactly `https://api.wotohub.com/user/skills/device-login`, upgrade the CLI the same way and check again. If Node.js 18+, npm, or global-install permission is unavailable, report the prerequisite error and stop; never use `sudo` or modify unrelated npm configuration.
+This Skill can:
 
-If `wotokol doctor` reports `setup_required`, use browser device authorization by default:
+- Submit the user's Chinese or English requirements unchanged to WotoKOL semantic search.
+- Find creators by the platforms, regions, content themes, audience size, or other criteria the user explicitly provides.
+- Present creator basics and `influencerSummary`, preserving the returned order.
+- Compare returned creators and fetch another page when more results are available.
 
-1. Run `wotokol login start --json`.
-2. Show the user only `verificationUriComplete` and `userCode`. Keep `loginId` for the next CLI command. Never show or request `deviceCode` or an API Key.
-3. Ask the user to open the URL, sign in or register, verify the matching code, and explicitly confirm access. New users can register from the device page; if a direct registration link is needed, use [WotoKOL registration for Skills](https://www.wotokol.com/register?registerReferer=skills).
-4. After the user says confirmation is complete, run `wotokol login wait <loginId>`, then run `wotokol doctor` again. Continue only when it reports `ok`.
+This Skill cannot:
 
-If authorization is denied, stop and report it without restarting automatically. If it expires or the local pending login is missing, explain that a fresh login is required and start a new one only when the user wants to continue. Do not search until setup succeeds.
+- Retrieve emails, prices, collaboration status, campaign relationships, video lists, or other unsupported data.
+- Infer missing values, fabricate creators, or relax requirements without the user's explicit instruction.
+- Perform outreach, send email, accept terms, make payments, or execute creator operations.
 
-Use `wotokol auth --key-stdin` only when device authorization remains unavailable after a CLI upgrade, or when the user has already explicitly supplied an API Key. Tell the user once that Agent conversations and tool inputs may be retained. Start the command in a persistent process session with writable standard input, send the exact Key followed by a newline through that session's stdin, and only then close stdin. Never place the Key in command arguments, shell command text, temporary files, logs, or user-facing output. If the runtime cannot write to a running process's stdin, stop with a capability explanation instead of using an insecure workaround. Run `wotokol doctor` afterward and continue only when it reports `ok`.
+## Workflow
 
-The CLI stores pending device authorization and credentials in the current user's private configuration directory. `WOTOKOL_API_KEY` remains supported for managed environments and takes precedence over stored credentials.
+### Step 1: Confirm the environment
 
-## Search
+- Input: Unknown CLI or authentication state.
+- Action: Run `wotokol doctor`. If the command is unavailable, run `npm install --global @wotokol/cli@latest --registry=https://registry.npmjs.org/`, then run doctor again.
+- Output: Continue to search only when doctor returns `status: ok`. For any other state, follow [CLI and API contract](references/api-contract.md) for installation, browser authorization, or error handling.
 
-Pass the user's original creator requirements as one `--description` argument. Do not add unstated platforms, countries, languages, demographics, or metric thresholds. Use argv-safe command execution and never concatenate untrusted text into a shell command.
+Do not use `sudo`, change unrelated npm configuration, or ask the user to run CLI installation commands.
+
+### Step 2: Prepare the search input
+
+- Input: The user's original requirements and any explicit result count or page request.
+- Action: Pass the full original request as one `--description` value. Do not add platforms, countries, languages, demographics, or metric thresholds that the user did not provide.
+- Output: `description`, `page`, and `page-size`. Defaults are page 1 and 20 results; page size must be between 1 and 100.
+
+If the user requests more than 100 creators, fetch at most 100 on the current page and explain the per-page limit. Fetch another page only when the user asks for more.
+
+### Step 3: Run the search
+
+- Input: The parameters prepared in Step 2.
+- Action: Execute the command with argv-safe tooling. Never concatenate untrusted user text into a shell command string.
+- Output: One complete JSON document from the CLI.
 
 ```text
-wotokol creator search --description "<original requirements>" --page 1 --page-size 20
+wotokol creator search --description "<original user requirements>" --page 1 --page-size 20
 ```
 
-Add `--include-ai-tags` only when the user explicitly asks for AI tags, content tags, detailed creator profiling, or a tag-based comparison. Otherwise omit it so the CLI returns the smaller default creator payload.
+The backend owns intent parsing, semantic retrieval, and relevance ranking. Do not locally rewrite the requirements or generate additional filters.
 
-Defaults are page 1 and 20 results. Keep `page-size` between 1 and 100. Fetch another page only when the user asks for more results or a next page.
+### Step 4: Validate the result
 
-The backend owns intent parsing, semantic retrieval, and relevance ranking. Never generate ES conditions locally. If no creators match, report that the current requirements returned no results; do not silently relax the request or repeat it with different criteria.
+- Input: CLI JSON.
+- Action: Confirm that `creators` is an array, preserve its order, and use only fields that are actually returned.
+- Output: A creator list ready for presentation, or a clear empty-result or error message.
 
-## Present Results
+If `creators` is empty, state that the current requirements returned no creators. On CLI, network, authentication, or business errors, report the error and stop. Do not invent results or retry with changed requirements.
 
-Preserve creator ordering. By default, present each creator with only these returned fields:
+### Step 5: Present the creators
 
-- `creatorName`
-- `platform`
-- `profileUrl`
-- `followerCount`
-- `avgViews`
-- `engagementRate`
-- `influencerSummary`
+- Input: The validated creator array.
+- Action: Follow [creator result format](references/output-format.md). Respond in the user's language; use natural Simplified Chinese labels and phrasing when the user writes in Chinese.
+- Output: A concise, localized creator list. Do not paste raw JSON or expose `hasMore`, page numbers, or other technical metadata.
 
-Do not display `blogTagsAi` in the default result list. Include it only when the user explicitly asks for AI tags, content tags, detailed creator profiling, or a tag-based comparison and the search was run with `--include-ai-tags`.
+Prioritize creator name, platform, profile link, follower count, average views, engagement rate, and AI profile summary. Use `creatorHandle` only when `profileUrl` is missing. Include `country` or `niche` only when it helps explain the match. Keep `sourceCreatorId` for internal result alignment only.
 
-Use `creatorHandle` only when `profileUrl` is missing. Include `country` or `niche` only when it helps show how a creator matches the user's stated requirements. Keep `sourceCreatorId` for internal follow-up only. Do not display `avatarUrl` in plain-text results.
+### Step 6: Handle pagination
 
-Do not infer missing values. Do not expose or claim emails, pricing, favorites, outreach state, campaign membership, videos, tenant data, or any other unsupported data.
+- Input: The user explicitly asks for the next page or more creators, and the previous response had `hasMore: true`.
+- Action: Reuse the exact same `description` and `page-size`; increment only `page`.
+- Output: The next creator list.
 
-On CLI, network, authentication, or business errors, report the error clearly and stop. For missing or invalid credentials, follow the device setup flow above; use stdin only under its fallback conditions. Do not invent results or change the user's constraints to retry.
+If the previous response had `hasMore: false`, explain that no more results are available and do not call search again.
+
+## Examples
+
+The examples below describe behavior only and do not represent real creator data.
+
+### Example 1: First search
+
+Input:
+
+```text
+Find US TikTok beauty tutorial creators with at least 100K followers. Return 20.
+```
+
+Action:
+
+```text
+wotokol creator search --description "Find US TikTok beauty tutorial creators with at least 100K followers. Return 20." --page 1 --page-size 20
+```
+
+Output: Present up to 20 creators in relevance order, using only returned creator basics and profile summaries.
+
+### Example 2: Next page
+
+Input:
+
+```text
+Show the next page.
+```
+
+Output: If the previous response had `hasMore: true`, reuse the original requirements and request page 2. Otherwise state that no more results are available.
+
+### Example 3: Unsupported data
+
+Input:
+
+```text
+Also give me these creators' emails and prices.
+```
+
+Output: Explain that this Skill does not provide emails or prices. Do not issue another search or infer those values.

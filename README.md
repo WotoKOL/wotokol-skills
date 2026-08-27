@@ -1,13 +1,16 @@
 # WotoKOL Skills
 
-Agent Skill for discovering overseas creators through WotoKOL natural-language semantic search and presenting returned AI tags and profile summaries.
+面向中文用户的 WotoKOL Agent Skill：通过自然语言语义搜索发现海外达人，并整理达人基础信息与 AI 达人总结。
 
 ## Repository contents
 
 ```text
 skills/wotokol/
 ├── SKILL.md
-└── agents/openai.yaml
+├── agents/openai.yaml
+└── references/
+    ├── api-contract.md
+    └── output-format.md
 
 evals/wotokol/
 └── evals.json
@@ -66,7 +69,7 @@ After installation, start a new Agent session and ask for creators in natural la
 Find US TikTok beauty tutorial creators with at least 100K followers.
 ```
 
-Default results show only creator information: creator name, platform, profile URL, follower count, average views, engagement rate, and AI summary. When the user explicitly asks for AI tags or detailed creator profiling, the Skill adds `--include-ai-tags`; otherwise the CLI omits the larger `blogTagsAi` profile from its JSON output.
+默认以中文编号列表展示达人名称、平台、主页链接、粉丝数、平均播放量、互动率和 AI 达人总结。Skill 不提供 AI 标签，也不会展示原始 JSON 或分页技术字段。
 
 ## Validate
 

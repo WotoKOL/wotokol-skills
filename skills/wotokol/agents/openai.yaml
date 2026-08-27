@@ -1,4 +1,4 @@
 interface:
   display_name: "WotoKOL 海外达人发现与洞察"
-  short_description: "通过自然语言发现海外达人并获取 AI 标签与画像总结"
-  default_prompt: "Use $wotokol to find overseas creators from my natural-language requirements and summarize the returned AI insights."
+  short_description: "用自然语言发现海外达人并整理基础信息与 AI 达人总结"
+  default_prompt: "使用 $wotokol 按我的自然语言要求搜索海外达人，并用中文整理返回的达人信息。"
