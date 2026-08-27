@@ -58,6 +58,7 @@
       "category": "insight",
       "prompt": "Compare the AI tags and summaries of the first three returned creators.",
       "expectations": [
+        "Adds --include-ai-tags to creator search because the user explicitly requested AI tags",
         "Uses only returned blogTagsAi and influencerSummary values",
         "Displays blogTagsAi because the user explicitly requested AI tags",
         "Keeps creator identity tied to each insight",

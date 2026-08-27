@@ -34,6 +34,8 @@ Pass the user's original creator requirements as one `--description` argument. D
 wotokol creator search --description "<original requirements>" --page 1 --page-size 20
 ```
 
+Add `--include-ai-tags` only when the user explicitly asks for AI tags, content tags, detailed creator profiling, or a tag-based comparison. Otherwise omit it so the CLI returns the smaller default creator payload.
+
 Defaults are page 1 and 20 results. Keep `page-size` between 1 and 100. Fetch another page only when the user asks for more results or a next page.
 
 The backend owns intent parsing, semantic retrieval, and relevance ranking. Never generate ES conditions locally. If no creators match, report that the current requirements returned no results; do not silently relax the request or repeat it with different criteria.
@@ -50,7 +52,7 @@ Preserve creator ordering. By default, present each creator with only these retu
 - `engagementRate`
 - `influencerSummary`
 
-Do not display `blogTagsAi` in the default result list. Include it only when the user explicitly asks for AI tags, content tags, detailed creator profiling, or a tag-based comparison.
+Do not display `blogTagsAi` in the default result list. Include it only when the user explicitly asks for AI tags, content tags, detailed creator profiling, or a tag-based comparison and the search was run with `--include-ai-tags`.
 
 Use `creatorHandle` only when `profileUrl` is missing. Include `country` or `niche` only when it helps show how a creator matches the user's stated requirements. Keep `sourceCreatorId` for internal follow-up only. Do not display `avatarUrl` in plain-text results.
 
