@@ -11,13 +11,20 @@ Use the `wotokol` CLI as the only search implementation. Do not replace it with 
 
 ## Setup
 
-Run `wotokol doctor` when CLI or API Key setup is unknown. If the command is unavailable or `cliVersion` is below `0.2.0`, directly run `npm install --global @wotokol/cli@latest --registry=https://registry.npmjs.org/` without asking for confirmation or asking the user to execute installation commands, then run `wotokol doctor` again. If Node.js 18+, npm, or global-install permission is unavailable, report the prerequisite error and stop; never use `sudo` or modify unrelated npm configuration.
+Run `wotokol doctor` when CLI or authentication setup is unknown. If the command is unavailable, directly run `npm install --global @wotokol/cli@latest --registry=https://registry.npmjs.org/` without asking for confirmation or asking the user to execute installation commands, then run `wotokol doctor` again. If `doctor` does not include `deviceLoginEndpoint`, upgrade the CLI the same way and check again. If Node.js 18+, npm, or global-install permission is unavailable, report the prerequisite error and stop; never use `sudo` or modify unrelated npm configuration.
 
-If `wotokol doctor` reports `setup_required`, direct the user to the [WotoKOL Skills registration page](https://www.wotokol.com/register?registerReferer=skills) to register and obtain an API Key. Do not search until setup succeeds.
+If `wotokol doctor` reports `setup_required`, use browser device authorization by default:
 
-Tell the user once that Agent conversations and tool inputs may be retained. After the user explicitly provides the Key, start `wotokol auth --key-stdin` and write it only to the process standard input. Never place the Key in command arguments or shell command text, and never echo, repeat, or include it in user-facing output. After the CLI reports success, run `wotokol doctor` again and continue only when it reports `ok`.
+1. Run `wotokol login start --json`.
+2. Show the user only `verificationUriComplete` and `userCode`. Keep `loginId` for the next CLI command. Never show or request `deviceCode` or an API Key.
+3. Ask the user to open the URL, sign in or register, verify the matching code, and explicitly confirm access. New users can register from the device page; if a direct registration link is needed, use [WotoKOL registration for Skills](https://www.wotokol.com/register?registerReferer=skills).
+4. After the user says confirmation is complete, run `wotokol login wait <loginId>`, then run `wotokol doctor` again. Continue only when it reports `ok`.
 
-The CLI stores the Key in the current user's configuration directory. `WOTOKOL_API_KEY` remains supported for managed environments and takes precedence over the stored Key.
+If authorization is denied, stop and report it without restarting automatically. If it expires or the local pending login is missing, explain that a fresh login is required and start a new one only when the user wants to continue. Do not search until setup succeeds.
+
+Use `wotokol auth --key-stdin` only when device authorization remains unavailable after a CLI upgrade, or when the user has already explicitly supplied an API Key. Tell the user once that Agent conversations and tool inputs may be retained. Start the command in a persistent process session with writable standard input, send the exact Key followed by a newline through that session's stdin, and only then close stdin. Never place the Key in command arguments, shell command text, temporary files, logs, or user-facing output. If the runtime cannot write to a running process's stdin, stop with a capability explanation instead of using an insecure workaround. Run `wotokol doctor` afterward and continue only when it reports `ok`.
+
+The CLI stores pending device authorization and credentials in the current user's private configuration directory. `WOTOKOL_API_KEY` remains supported for managed environments and takes precedence over stored credentials.
 
 ## Search
 
@@ -49,4 +56,4 @@ Use `creatorHandle` only when `profileUrl` is missing. Include `country` or `nic
 
 Do not infer missing values. Do not expose or claim emails, pricing, favorites, outreach state, campaign membership, videos, tenant data, or any other unsupported data.
 
-On CLI, network, authentication, or business errors, report the error clearly and stop. For a missing Key, follow the setup flow above. For an invalid Key or `user.notLogin.error`, ask the user to obtain a valid Key and replace it through the same stdin flow. Do not invent results or change the user's constraints to retry.
+On CLI, network, authentication, or business errors, report the error clearly and stop. For missing or invalid credentials, follow the device setup flow above; use stdin only under its fallback conditions. Do not invent results or change the user's constraints to retry.

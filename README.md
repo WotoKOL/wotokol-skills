@@ -25,14 +25,17 @@ npm install --global @wotokol/cli
 
 When the Skill is running in a compatible Agent, it automatically installs or updates a missing or outdated CLI from the official npm registry. The user does not need to confirm the installation or run the command manually. The host Agent may still request permission according to its own command-execution policy.
 
-Register through the [WotoKOL Skills registration page](https://www.wotokol.com/register?registerReferer=skills) to obtain an API Key. The Skill can configure it through the CLI standard-input flow, then verify the environment:
+Authentication uses browser device authorization by default. The Agent starts the login and shows the returned verification URL and user code:
 
 ```bash
-wotokol auth --key-stdin
+wotokol login start --json
+wotokol login wait <login_id>
 wotokol doctor
 ```
 
-The Key must be written only to the command's standard input, never passed as a command-line argument. Agent conversations and tool inputs may be retained by the Agent platform; use a revocable Key and rotate it after unexpected exposure.
+Open the verification URL, sign in or register, verify the matching code, and explicitly confirm access. New users can register from that flow or use the [WotoKOL Skills registration page](https://www.wotokol.com/register?registerReferer=skills). The API Key is delivered only to the CLI and is not shown in the browser or Agent conversation.
+
+`wotokol auth --key-stdin` remains a fallback when device authorization is unavailable or the user has already supplied a Key. The Agent must keep that process open, send the Key plus a newline through writable stdin, and only then close stdin. The Key must never be placed in command arguments, shell text, temporary files, logs, or user-facing output.
 
 ## Install the Skill
 

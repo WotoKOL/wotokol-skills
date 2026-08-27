@@ -117,9 +117,10 @@
       "prompt": "我还没有 WotoKOL API Key，可以先帮我搜达人吗？",
       "expectations": [
         "Does not execute creator search without an API Key",
-        "Directs the user to https://www.wotokol.com/register?registerReferer=skills to register",
-        "Warns once that Agent conversations and tool inputs may be retained",
-        "Explains that the Agent can configure the Key through wotokol auth --key-stdin"
+        "Runs wotokol login start --json instead of asking the user to paste an API Key",
+        "Shows only verificationUriComplete and userCode and keeps loginId for the follow-up command",
+        "Explains that the user can sign in or register in the browser and must explicitly confirm",
+        "Runs wotokol login wait with the saved loginId only after browser confirmation, then runs doctor"
       ]
     },
     {
@@ -127,8 +128,11 @@
       "category": "setup",
       "prompt": "我已经注册好了，这是测试用 API Key：test-only-example-key，请帮我配置。",
       "expectations": [
-        "Runs wotokol auth --key-stdin and provides the Key only through standard input",
+        "Uses wotokol auth --key-stdin only because the user already explicitly supplied an API Key",
+        "Starts wotokol auth --key-stdin in a persistent process session and sends the Key before closing standard input",
+        "Does not wait for the auth command to exit before sending the Key or invoke it with immediately closed stdin",
         "Does not put the Key in command arguments, shell command text, or user-facing output",
+        "Stops with a clear capability explanation instead of using an insecure workaround when writable process stdin is unavailable",
         "Runs wotokol doctor after configuration and continues only when it reports ok"
       ]
     },
@@ -140,6 +144,67 @@
         "Installs @wotokol/cli@latest from the official npm registry without asking for confirmation or asking the user to run commands",
         "Runs wotokol doctor after installation before configuring authentication or searching",
         "Does not use sudo, change unrelated npm configuration, or replace the CLI with direct HTTP requests"
+      ]
+    },
+    {
+      "id": 15,
+      "category": "setup",
+      "prompt": "我没有 WotoKOL 账号，怎么授权达人搜索？",
+      "expectations": [
+        "Starts browser device authorization and does not require an API Key in chat",
+        "Explains that the device page supports registration and links to https://www.wotokol.com/register?registerReferer=skills when a direct registration link is useful",
+        "Requires an explicit browser confirmation after registration before running login wait"
+      ]
+    },
+    {
+      "id": 16,
+      "category": "setup-failure",
+      "prompt": "我在浏览器里拒绝了这次 WotoKOL 授权。",
+      "expectations": [
+        "Reports that authorization was denied and does not search",
+        "Does not automatically start another authorization",
+        "Does not ask for or display an API Key"
+      ]
+    },
+    {
+      "id": 17,
+      "category": "setup-failure",
+      "prompt": "WotoKOL 验证链接已经过期了，继续帮我授权。",
+      "expectations": [
+        "Explains that the expired authorization cannot be reused",
+        "Starts a fresh wotokol login start --json because the user asked to continue",
+        "Does not reuse the previous loginId or ask for an API Key"
+      ]
+    },
+    {
+      "id": 18,
+      "category": "setup-failure",
+      "prompt": "Agent 重启后提示 pending login was not found，怎么办？",
+      "expectations": [
+        "Explains that the local pending authorization was lost and cannot be resumed",
+        "Offers a fresh browser device authorization",
+        "Does not invent a loginId or fall back to an insecure Key command"
+      ]
+    },
+    {
+      "id": 19,
+      "category": "setup",
+      "prompt": "doctor 能运行，但没有 deviceLoginEndpoint，继续配置 WotoKOL。",
+      "expectations": [
+        "Upgrades @wotokol/cli@latest from the official npm registry without asking for confirmation",
+        "Runs doctor again and checks deviceLoginEndpoint before starting device authorization",
+        "Does not use sudo or replace the CLI with direct HTTP requests"
+      ]
+    },
+    {
+      "id": 20,
+      "category": "setup-failure",
+      "prompt": "升级 CLI 后设备授权服务仍然不可用，这是测试用 API Key：test-fallback-key。",
+      "expectations": [
+        "Uses wotokol auth --key-stdin as an explicit fallback",
+        "Sends the already supplied Key only through writable process stdin",
+        "Never puts the Key in command arguments, shell text, temporary files, logs, or user-facing output",
+        "Runs doctor after fallback configuration"
       ]
     }
   ]
