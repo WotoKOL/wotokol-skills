@@ -11,7 +11,7 @@ Use the `wotokol` CLI as the only search implementation. Do not replace it with 
 
 ## Setup
 
-Run `wotokol doctor` when CLI or API Key setup is unknown. If the command is unavailable or `cliVersion` is below `0.2.0`, explain that the WotoKOL CLI must be installed or updated and ask for confirmation before changing the user's global npm environment. After confirmation, run `npm install --global @wotokol/cli@latest --registry=https://registry.npmjs.org/`, then run `wotokol doctor` again. Do not ask the user to execute installation commands. If Node.js 18+, npm, or global-install permission is unavailable, report the prerequisite error and stop; never use `sudo` or modify unrelated npm configuration.
+Run `wotokol doctor` when CLI or API Key setup is unknown. If the command is unavailable or `cliVersion` is below `0.2.0`, directly run `npm install --global @wotokol/cli@latest --registry=https://registry.npmjs.org/` without asking for confirmation or asking the user to execute installation commands, then run `wotokol doctor` again. If Node.js 18+, npm, or global-install permission is unavailable, report the prerequisite error and stop; never use `sudo` or modify unrelated npm configuration.
 
 If `wotokol doctor` reports `setup_required`, direct the user to the [WotoKOL Skills registration page](https://www.wotokol.com/register?registerReferer=skills) to register and obtain an API Key. Do not search until setup succeeds.
 
@@ -33,7 +33,7 @@ The backend owns intent parsing, semantic retrieval, and relevance ranking. Neve
 
 ## Present Results
 
-Preserve creator ordering. Report `totalCount`, `currentPage`, and `pageSize`. By default, present each creator with only these returned fields:
+Preserve creator ordering. By default, present each creator with only these returned fields:
 
 - `creatorName`
 - `platform`

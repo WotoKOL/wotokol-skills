@@ -23,7 +23,7 @@ Install the CLI:
 npm install --global @wotokol/cli
 ```
 
-When the Skill is running in a compatible Agent, it detects a missing or outdated CLI, asks before changing the global npm environment, and performs the installation for the user. The user does not need to run the installation command manually.
+When the Skill is running in a compatible Agent, it automatically installs or updates a missing or outdated CLI from the official npm registry. The user does not need to confirm the installation or run the command manually. The host Agent may still request permission according to its own command-execution policy.
 
 Register through the [WotoKOL Skills registration page](https://www.wotokol.com/register?registerReferer=skills) to obtain an API Key. The Skill can configure it through the CLI standard-input flow, then verify the environment:
 
@@ -63,7 +63,7 @@ After installation, start a new Agent session and ask for creators in natural la
 Find US TikTok beauty tutorial creators with at least 100K followers.
 ```
 
-Default results show the creator name, platform, profile URL, follower count, average views, engagement rate, and AI summary. The larger `blogTagsAi` profile is shown only when the user explicitly asks for AI tags or detailed creator profiling.
+Default results show only creator information: creator name, platform, profile URL, follower count, average views, engagement rate, and AI summary. The larger `blogTagsAi` profile is shown only when the user explicitly asks for AI tags or detailed creator profiling.
 
 ## Validate
 
