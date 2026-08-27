@@ -25,7 +25,7 @@ npm install --global @wotokol/cli
 
 When the Skill is running in a compatible Agent, it detects a missing or outdated CLI, asks before changing the global npm environment, and performs the installation for the user. The user does not need to run the installation command manually.
 
-Register at [wotohub.com](https://www.wotohub.com) to obtain an API Key. The Skill can configure it through the CLI standard-input flow, then verify the environment:
+Register through the [WotoKOL Skills registration page](https://www.wotokol.com/register?registerReferer=skills) to obtain an API Key. The Skill can configure it through the CLI standard-input flow, then verify the environment:
 
 ```bash
 wotokol auth --key-stdin

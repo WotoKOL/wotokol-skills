@@ -117,7 +117,7 @@
       "prompt": "我还没有 WotoKOL API Key，可以先帮我搜达人吗？",
       "expectations": [
         "Does not execute creator search without an API Key",
-        "Directs the user to https://www.wotohub.com to register",
+        "Directs the user to https://www.wotokol.com/register?registerReferer=skills to register",
         "Warns once that Agent conversations and tool inputs may be retained",
         "Explains that the Agent can configure the Key through wotokol auth --key-stdin"
       ]

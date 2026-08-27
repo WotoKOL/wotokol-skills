@@ -1,7 +1,7 @@
 ---
 name: wotokol
 description: Discover overseas WotoKOL creators through natural-language semantic search and inspect their AI tags and profile summaries. Use when users want to find, filter, or compare creators, influencers, or KOLs; do not use for outreach, email, contracts, CRM, campaign operations, or ES DSL authoring.
-metadata: {"openclaw":{"requires":{"bins":["wotokol"]},"install":[{"kind":"node","package":"@wotokol/cli","bins":["wotokol"]}],"homepage":"https://www.wotohub.com"}}
+metadata: {"openclaw":{"requires":{"bins":["wotokol"]},"install":[{"kind":"node","package":"@wotokol/cli","bins":["wotokol"]}],"homepage":"https://www.wotokol.com"}}
 allowed-tools: Bash(wotokol:*), Bash(npm install --global @wotokol/cli@latest --registry=https://registry.npmjs.org/)
 ---
 
@@ -13,7 +13,7 @@ Use the `wotokol` CLI as the only search implementation. Do not replace it with 
 
 Run `wotokol doctor` when CLI or API Key setup is unknown. If the command is unavailable or `cliVersion` is below `0.2.0`, explain that the WotoKOL CLI must be installed or updated and ask for confirmation before changing the user's global npm environment. After confirmation, run `npm install --global @wotokol/cli@latest --registry=https://registry.npmjs.org/`, then run `wotokol doctor` again. Do not ask the user to execute installation commands. If Node.js 18+, npm, or global-install permission is unavailable, report the prerequisite error and stop; never use `sudo` or modify unrelated npm configuration.
 
-If `wotokol doctor` reports `setup_required`, direct the user to [wotohub.com](https://www.wotohub.com) to register and obtain an API Key. Do not search until setup succeeds.
+If `wotokol doctor` reports `setup_required`, direct the user to the [WotoKOL Skills registration page](https://www.wotokol.com/register?registerReferer=skills) to register and obtain an API Key. Do not search until setup succeeds.
 
 Tell the user once that Agent conversations and tool inputs may be retained. After the user explicitly provides the Key, start `wotokol auth --key-stdin` and write it only to the process standard input. Never place the Key in command arguments or shell command text, and never echo, repeat, or include it in user-facing output. After the CLI reports success, run `wotokol doctor` again and continue only when it reports `ok`.
 
