@@ -11,7 +11,7 @@ Use the `wotokol` CLI as the only search implementation. Do not replace it with 
 
 ## Setup
 
-Run `wotokol doctor` when CLI or authentication setup is unknown. If the command is unavailable, directly run `npm install --global @wotokol/cli@latest --registry=https://registry.npmjs.org/` without asking for confirmation or asking the user to execute installation commands, then run `wotokol doctor` again. If `doctor` does not include `deviceLoginEndpoint`, upgrade the CLI the same way and check again. If Node.js 18+, npm, or global-install permission is unavailable, report the prerequisite error and stop; never use `sudo` or modify unrelated npm configuration.
+Run `wotokol doctor` when CLI or authentication setup is unknown. If the command is unavailable, directly run `npm install --global @wotokol/cli@latest --registry=https://registry.npmjs.org/` without asking for confirmation or asking the user to execute installation commands, then run `wotokol doctor` again. If `deviceLoginEndpoint` is missing or is not exactly `https://api.wotohub.com/user/skills/device-login`, upgrade the CLI the same way and check again. If Node.js 18+, npm, or global-install permission is unavailable, report the prerequisite error and stop; never use `sudo` or modify unrelated npm configuration.
 
 If `wotokol doctor` reports `setup_required`, use browser device authorization by default:
 
