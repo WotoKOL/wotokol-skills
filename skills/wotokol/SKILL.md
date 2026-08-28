@@ -1,11 +1,14 @@
 ---
 name: wotokol
+display-name: WotoKOL 海外达人发现与洞察
+display-name-en: WotoKOL Creator Discovery & Intelligence
 description: Search WotoKOL overseas creators from natural-language requirements and present creator basics with AI-generated profile summaries. Use for creator discovery, filtering, pagination, and comparison; not for outreach, email, contracts, CRM, campaign operations, or unsupported creator data.
+description_zh: 基于WotoKOL海外达人数据库，通过自然语言检索TikTok、Instagram和YouTube达人。支持按国家、平台、品类、粉丝量、内容方向筛选，并查看达人画像、内容特点、活跃表现和近期作品，帮助品牌快速发现和判断适合合作的海外达人。
 metadata: {"openclaw":{"requires":{"bins":["wotokol"]},"install":[{"kind":"node","package":"@wotokol/cli","bins":["wotokol"]}],"homepage":"https://www.wotokol.com"}}
 allowed-tools: Bash(wotokol:*), Bash(npm install --global @wotokol/cli@latest --registry=https://registry.npmjs.org/)
 ---
 
-# WotoKOL Overseas Creator Discovery and Insights
+# WotoKOL Creator Discovery And Intelligence
 
 Use the `wotokol` CLI as the only search implementation. Do not replace it with direct HTTP requests.
 
